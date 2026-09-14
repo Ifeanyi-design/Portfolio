@@ -14,3 +14,7 @@ dist/
 build/
 .vscode/
 .idea/
+
+# Local preview / screenshot scratch files
+.preview/
+.preview*.png
