@@ -1,7 +1,11 @@
-import { ExternalLink, GitFork, Film, Palette, BrainCircuit, Zap } from 'lucide-react';
+import { ExternalLink, GitFork, Film, Palette, BrainCircuit, Zap, Printer, Maximize2 } from 'lucide-react';
 import type { Project } from '../types';
+import type { ModalImageData } from './ImageModal';
 
-interface Props { project: Project; }
+interface Props {
+  project: Project;
+  onExpandImage?: (data: ModalImageData) => void;
+}
 
 /* Single consistent icon per project — no emoji */
 function ProjectIcon({ id }: { id: string }) {
@@ -10,11 +14,12 @@ function ProjectIcon({ id }: { id: string }) {
     'manga-forge':   <Palette size={20} />,
     'atlas':         <BrainCircuit size={20} />,
     'servicesync':   <Zap size={20} />,
+    'gregbuk':       <Printer size={20} />,
   };
   return <>{map[id] ?? <Zap size={20} />}</>;
 }
 
-export default function ProjectCard({ project }: Props) {
+export default function ProjectCard({ project, onExpandImage }: Props) {
   const hasDemo = project.links.demo && project.links.demo !== '#';
 
   return (
@@ -53,14 +58,33 @@ export default function ProjectCard({ project }: Props) {
       {/* Screenshot / placeholder */}
       <div className="mx-6 mb-5 overflow-hidden rounded-xl border border-white/8 bg-surface-elevated">
         {project.image.desktop ? (
-          <div className="relative aspect-[16/10] w-full overflow-hidden">
+          <div
+            onClick={() =>
+              onExpandImage?.({
+                src: project.image.desktop!,
+                alt: project.image.alt,
+                title: project.outcomeTitle,
+                demo: project.links.demo,
+                github: project.links.github,
+              })
+            }
+            className="group/img relative aspect-[16/10] w-full overflow-hidden cursor-pointer"
+            title="Click to view full image"
+          >
             <img
               src={project.image.desktop}
               alt={project.image.alt}
               loading="lazy"
-              className="h-full w-full object-cover object-top transition-transform duration-500 ease-out group-hover:scale-105"
+              className="h-full w-full object-cover object-top transition-transform duration-500 ease-out group-hover/img:scale-105"
             />
-            <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-surface-card/60 via-transparent to-transparent opacity-40" />
+            <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-surface-card/60 via-transparent to-transparent opacity-40 group-hover/img:opacity-10 transition-opacity" />
+
+            {/* Hover overlay hint */}
+            <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover/img:opacity-100 transition-opacity bg-black/40 backdrop-blur-[2px]">
+              <span className="inline-flex items-center gap-1.5 rounded-full bg-surface-card/90 border border-white/20 px-3 py-1.5 text-xs font-semibold text-white shadow-xl transition-transform transform scale-95 group-hover/img:scale-100">
+                <Maximize2 size={13} className="text-accent-light" /> Full View
+              </span>
+            </div>
           </div>
         ) : (
           <div className="relative flex aspect-[16/10] w-full items-center justify-center dot-grid overflow-hidden">

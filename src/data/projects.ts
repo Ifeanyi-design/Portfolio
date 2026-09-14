@@ -97,4 +97,28 @@ export const projects: readonly Project[] = [
     },
     isConcept: false,
   },
+  {
+    id: 'gregbuk',
+    outcomeTitle: 'Enterprise web portal for commercial printing & digital ID firm',
+    problem:
+      'Established corporate service firms struggle with outdated web presence that fails to represent multi-division scale, machinery, and digital ID workflows.',
+    solution:
+      'A multi-service corporate portal showcasing digital ID solutions, printing consumables, machinery, and consultation workflows with asynchronous task management.',
+    features: [
+      'Multi-division corporate showcase covering digital ID printing, consumables, and machinery',
+      'Interactive consultation and quote request pipeline with Celery background tasks',
+      'Modern corporate web portal with dark/light mode and PostgreSQL backend',
+    ],
+    stack: ['Python', 'HTML5', 'CSS3', 'Bootstrap', 'Celery', 'PostgreSQL'],
+    image: {
+      desktop: '/screenshots/gregbuk-services.png',
+      mobile: null,
+      alt: 'Gregbuk International Company corporate services and printing machinery portal',
+    },
+    links: {
+      demo: 'https://gregbuk.onrender.com/',
+      github: 'https://github.com/Ifeanyi-design/Gregbuk',
+    },
+    isConcept: false,
+  },
 ];

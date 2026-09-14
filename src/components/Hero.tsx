@@ -2,7 +2,7 @@ import { ArrowRight, ArrowUpRight, FolderOpen, Layers3, CalendarDays, Globe } fr
 import { site } from '../data/site';
 
 const stats = [
-  { icon: FolderOpen,  value: '4+',  label: 'Projects Built' },
+  { icon: FolderOpen,  value: '5+',  label: 'Projects Built' },
   { icon: Layers3,     value: '3',   label: 'Skill Domains'  },
   { icon: CalendarDays,value: '2+',  label: 'Years Coding'   },
   { icon: Globe,       value: '🌍',  label: 'Remote Worldwide'},
