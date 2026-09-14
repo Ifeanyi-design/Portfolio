@@ -10,22 +10,61 @@
     @apply bg-surface font-sans text-ink antialiased;
     background-color: #09090B;
     color: #FAFAFA;
+    overflow-x: hidden;
   }
   h1, h2, h3, h4 { @apply font-bold tracking-tight; }
 
   ::selection {
-    background-color: rgba(99, 102, 241, 0.3);
+    background-color: rgba(99, 102, 241, 0.35);
     color: #fff;
   }
-  ::-webkit-scrollbar        { width: 5px; }
+  ::-webkit-scrollbar        { width: 6px; }
   ::-webkit-scrollbar-track  { background: #09090B; }
-  ::-webkit-scrollbar-thumb  { background: rgba(99,102,241,0.4); border-radius: 4px; }
+  ::-webkit-scrollbar-thumb  { background: rgba(99,102,241,0.35); border-radius: 4px; }
+  ::-webkit-scrollbar-thumb:hover { background: rgba(99,102,241,0.6); }
+}
+
+@keyframes floatSlow {
+  0%, 100% { transform: translateY(0px) rotate(0deg); }
+  50% { transform: translateY(-14px) rotate(1deg); }
+}
+
+@keyframes floatReverse {
+  0%, 100% { transform: translateY(0px) rotate(0deg); }
+  50% { transform: translateY(12px) rotate(-1deg); }
+}
+
+@keyframes pulseGlow {
+  0%, 100% { opacity: 0.35; transform: scale(1); }
+  50% { opacity: 0.6; transform: scale(1.06); }
+}
+
+@keyframes shimmerEffect {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(200%); }
 }
 
 @layer utilities {
-  /* ── Gradient text (single indigo palette) ── */
+  /* ── Smooth Floating animations ── */
+  .animate-float {
+    animation: floatSlow 6s ease-in-out infinite;
+  }
+  .animate-float-reverse {
+    animation: floatReverse 7s ease-in-out infinite;
+  }
+  .animate-glow-pulse {
+    animation: pulseGlow 4s ease-in-out infinite;
+  }
+
+  /* ── Gradient text ── */
   .text-gradient {
-    background: linear-gradient(125deg, #818CF8 0%, #6366F1 50%, #4F46E5 100%);
+    background: linear-gradient(125deg, #A5B4FC 0%, #6366F1 50%, #4F46E5 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .text-gradient-subtle {
+    background: linear-gradient(180deg, #FFFFFF 0%, rgba(255,255,255,0.7) 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -33,10 +72,10 @@
 
   /* ── Glass card ── */
   .glass {
-    background: rgba(17, 17, 22, 0.75);
+    background: rgba(17, 17, 22, 0.78);
     backdrop-filter: blur(24px);
     -webkit-backdrop-filter: blur(24px);
-    border: 1px solid rgba(255,255,255,0.07);
+    border: 1px solid rgba(255,255,255,0.08);
   }
 
   /* ── Dot grid pattern ── */
@@ -48,47 +87,107 @@
   /* ── Hero page glow ── */
   .hero-glow {
     background:
-      radial-gradient(ellipse 75% 55% at 50% -5%, rgba(99,102,241,0.32) 0%, transparent 65%),
+      radial-gradient(ellipse 80% 55% at 50% -5%, rgba(99,102,241,0.28) 0%, transparent 68%),
       #09090B;
   }
 
-  /* ── Subtle section divider ── */
+  /* ── Section divider ── */
   .section-divider {
     border: none;
     height: 1px;
-    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.06) 50%, transparent);
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.08) 50%, transparent);
     margin: 0;
   }
 
-  /* ── Button variants ── */
+  /* ── Shimmer button reflection ── */
+  .shimmer-badge {
+    position: relative;
+    overflow: hidden;
+  }
+  .shimmer-badge::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 60%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.25), transparent);
+    animation: shimmerEffect 3.5s infinite;
+  }
+
+  /* ── Button variants with spring-like micro-interactions ── */
   .btn-primary {
-    @apply inline-flex items-center gap-2 rounded-full bg-accent px-6 py-3 text-sm font-semibold text-white transition-all duration-200;
+    @apply relative inline-flex items-center gap-2 rounded-full bg-accent px-6 py-3 text-sm font-semibold text-white transition-all duration-300;
     box-shadow: 0 0 0 1px rgba(99,102,241,0.5), 0 4px 16px rgba(99,102,241,0.25);
   }
   .btn-primary:hover {
     background-color: #4F46E5;
-    box-shadow: 0 0 0 1px rgba(99,102,241,0.7), 0 6px 24px rgba(99,102,241,0.35);
-    transform: translateY(-1px);
+    box-shadow: 0 0 0 1px rgba(99,102,241,0.8), 0 8px 28px rgba(99,102,241,0.45);
+    transform: translateY(-2px);
   }
-  .btn-ghost {
-    @apply inline-flex items-center gap-2 rounded-full border px-6 py-3 text-sm font-semibold text-ink/70 transition-all duration-200;
-    border-color: rgba(255,255,255,0.1);
-    background: rgba(255,255,255,0.03);
-  }
-  .btn-ghost:hover {
-    border-color: rgba(99,102,241,0.4);
-    color: #818CF8;
-    background: rgba(99,102,241,0.06);
-    transform: translateY(-1px);
+  .btn-primary:active {
+    transform: translateY(0px) scale(0.98);
   }
 
-  /* ── Card base ── */
+  .btn-ghost {
+    @apply relative inline-flex items-center gap-2 rounded-full border px-6 py-3 text-sm font-semibold text-ink/75 transition-all duration-300;
+    border-color: rgba(255,255,255,0.1);
+    background: rgba(255,255,255,0.03);
+    backdrop-filter: blur(8px);
+  }
+  .btn-ghost:hover {
+    border-color: rgba(99,102,241,0.45);
+    color: #A5B4FC;
+    background: rgba(99,102,241,0.08);
+    box-shadow: 0 4px 20px rgba(99,102,241,0.12);
+    transform: translateY(-2px);
+  }
+  .btn-ghost:active {
+    transform: translateY(0px) scale(0.98);
+  }
+
+  /* ── Interactive Card base ── */
   .card {
-    @apply rounded-2xl border bg-surface-card transition-all duration-200;
-    border-color: rgba(255,255,255,0.07);
+    @apply relative rounded-2xl border bg-surface-card transition-all duration-300;
+    border-color: rgba(255,255,255,0.08);
   }
   .card:hover {
-    border-color: rgba(99,102,241,0.3);
-    box-shadow: 0 4px 24px rgba(99,102,241,0.12);
+    border-color: rgba(99,102,241,0.38);
+    box-shadow: 0 8px 32px rgba(0,0,0,0.4), 0 0 24px rgba(99,102,241,0.15);
+    transform: translateY(-3px);
+  }
+
+  /* ── Scroll progress bar ── */
+  .scroll-progress {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, #6366F1, #818CF8, #A5B4FC);
+    transform-origin: 0% 50%;
+    z-index: 100;
+  }
+}
+
+/* Modern Scroll-driven reveal (supported in Chrome 115+, Edge 115+, Safari 26+) */
+@media (prefers-reduced-motion: no-preference) {
+  @supports ((animation-timeline: view()) and (animation-range: entry)) {
+    @keyframes scrollFadeUp {
+      from {
+        opacity: 0.1;
+        transform: translateY(28px) scale(0.98);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+
+    .scroll-reveal {
+      animation: scrollFadeUp auto cubic-bezier(0.16, 1, 0.3, 1) both;
+      animation-timeline: view();
+      animation-range: entry 10% cover 30%;
+    }
   }
 }
