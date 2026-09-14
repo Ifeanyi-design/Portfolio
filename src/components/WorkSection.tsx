@@ -1,20 +1,36 @@
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { ArrowUpRight, Sparkles } from 'lucide-react';
 import { projects } from '../data/projects';
+import type { Project } from '../types';
 import ProjectCard from './ProjectCard';
 import ImageModal, { type ModalImageData } from './ImageModal';
 
-type FilterCategory = 'all' | 'ai' | 'web';
+type FilterCategory = 'all' | Project['category'];
+
+/** Tabs are derived from the data — counts can never drift out of sync again. */
+const TABS: readonly { id: FilterCategory; label: string }[] = [
+  { id: 'all', label: 'All Projects' },
+  { id: 'ai',  label: 'AI & Automation' },
+  { id: 'web', label: 'Web Applications' },
+];
 
 export default function WorkSection() {
   const [filter, setFilter] = useState<FilterCategory>('all');
   const [activeImage, setActiveImage] = useState<ModalImageData | null>(null);
 
-  const filteredProjects = projects.filter((p) => {
-    if (filter === 'ai') return p.id === 'servicesync' || p.id === 'atlas';
-    if (filter === 'web') return p.id === 'maxcinema' || p.id === 'manga-forge' || p.id === 'gregbuk';
-    return true;
-  });
+  const counts = useMemo(
+    () => ({
+      all: projects.length,
+      ai: projects.filter((p) => p.category === 'ai').length,
+      web: projects.filter((p) => p.category === 'web').length,
+    }),
+    [],
+  );
+
+  const filteredProjects = useMemo(
+    () => (filter === 'all' ? projects : projects.filter((p) => p.category === filter)),
+    [filter],
+  );
 
   return (
     <section id="work" className="relative py-24">
@@ -30,8 +46,8 @@ export default function WorkSection() {
               Things I've <span className="text-gradient">Built</span>
             </h2>
             <p className="mt-3 max-w-xl text-sm leading-[1.8] text-ink/50">
-              5 production-grade applications across web platforms, developer tools, and AI systems.
-              Click any project screenshot for an enlarged view.
+              {counts.all} shipped applications across web platforms, AI systems and developer tools.
+              Click any screenshot for an enlarged view.
             </p>
           </div>
           <a href="#contact" className="btn-ghost shrink-0 text-xs py-2.5">
@@ -41,36 +57,27 @@ export default function WorkSection() {
 
         {/* Filter Tabs */}
         <div className="mb-8 flex flex-wrap items-center gap-2">
-          <button
-            onClick={() => setFilter('all')}
-            className={`rounded-full px-4 py-1.5 text-xs font-semibold transition-all cursor-pointer ${
-              filter === 'all'
-                ? 'bg-accent text-white shadow-glow-sm'
-                : 'border border-white/8 bg-surface-elevated text-ink/50 hover:border-accent/30 hover:text-ink'
-            }`}
-          >
-            All Projects ({projects.length})
-          </button>
-          <button
-            onClick={() => setFilter('ai')}
-            className={`inline-flex items-center gap-1.5 rounded-full px-4 py-1.5 text-xs font-semibold transition-all cursor-pointer ${
-              filter === 'ai'
-                ? 'bg-accent text-white shadow-glow-sm'
-                : 'border border-white/8 bg-surface-elevated text-ink/50 hover:border-accent/30 hover:text-ink'
-            }`}
-          >
-            <Sparkles size={12} className="text-accent-light" /> AI & Automation (2)
-          </button>
-          <button
-            onClick={() => setFilter('web')}
-            className={`rounded-full px-4 py-1.5 text-xs font-semibold transition-all cursor-pointer ${
-              filter === 'web'
-                ? 'bg-accent text-white shadow-glow-sm'
-                : 'border border-white/8 bg-surface-elevated text-ink/50 hover:border-accent/30 hover:text-ink'
-            }`}
-          >
-            Web Applications (3)
-          </button>
+          {TABS.map((tab) => {
+            const isActive = filter === tab.id;
+            return (
+              <button
+                key={tab.id}
+                type="button"
+                onClick={() => setFilter(tab.id)}
+                aria-pressed={isActive}
+                className={`inline-flex items-center gap-1.5 rounded-full px-4 py-1.5 text-xs font-semibold transition-all cursor-pointer ${
+                  isActive
+                    ? 'bg-accent text-white shadow-glow-sm'
+                    : 'border border-white/8 bg-surface-elevated text-ink/50 hover:border-accent/30 hover:text-ink'
+                }`}
+              >
+                {tab.id === 'ai' && (
+                  <Sparkles size={12} className={isActive ? 'text-white' : 'text-accent-light'} />
+                )}
+                {tab.label} ({counts[tab.id]})
+              </button>
+            );
+          })}
         </div>
 
         {/* Project Grid */}

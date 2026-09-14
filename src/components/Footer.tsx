@@ -10,6 +10,7 @@ const socialIcon: Record<string, React.ReactNode> = {
 const navLinks = [
   { label: 'Work',     href: '#work' },
   { label: 'Services', href: '#services' },
+  { label: 'Process',  href: '#process' },
   { label: 'About',    href: '#about' },
   { label: 'Contact',  href: '#contact' },
 ];

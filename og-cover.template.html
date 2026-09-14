@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html,body { width:1200px; height:630px; overflow:hidden; }
+  body {
+    font-family: 'Segoe UI', 'Inter', system-ui, Arial, sans-serif;
+    background:#09090B; color:#FAFAFA;
+    position:relative;
+  }
+  .glow {
+    position:absolute; inset:0;
+    background:
+      radial-gradient(ellipse 70% 60% at 22% -10%, rgba(99,102,241,0.38) 0%, transparent 62%),
+      radial-gradient(ellipse 55% 55% at 92% 108%, rgba(99,102,241,0.24) 0%, transparent 65%);
+  }
+  .dots {
+    position:absolute; inset:0;
+    background-image: radial-gradient(rgba(99,102,241,0.16) 1px, transparent 1px);
+    background-size: 34px 34px;
+    mask-image: linear-gradient(to bottom, black 0%, transparent 78%);
+    -webkit-mask-image: linear-gradient(to bottom, black 0%, transparent 78%);
+  }
+  .wrap { position:relative; height:100%; display:flex; align-items:center; padding:0 68px; gap:44px; }
+
+  .left { width:610px; flex-shrink:0; }
+  .pill {
+    display:inline-flex; align-items:center; gap:9px;
+    border:1px solid rgba(99,102,241,0.42); background:rgba(99,102,241,0.14);
+    color:#A5B4FC; font-size:14px; font-weight:700; letter-spacing:2.4px;
+    padding:8px 16px; border-radius:999px; text-transform:uppercase;
+  }
+  .pill .dot { width:8px; height:8px; border-radius:999px; background:#10B981; }
+  h1 { font-size:78px; line-height:1.02; font-weight:800; letter-spacing:-2.5px; margin-top:26px; }
+  h1 .grad {
+    background:linear-gradient(122deg,#A5B4FC 0%,#6366F1 52%,#4F46E5 100%);
+    -webkit-background-clip:text; background-clip:text;
+    -webkit-text-fill-color:transparent; color:transparent;
+  }
+  .role { margin-top:20px; font-size:29px; font-weight:600; color:rgba(250,250,250,0.82); letter-spacing:-0.4px; }
+  .tag { margin-top:14px; font-size:19px; color:rgba(250,250,250,0.52); font-weight:400; }
+  .stack { display:flex; flex-wrap:wrap; gap:9px; margin-top:30px; }
+  .stack span {
+    font-size:14px; font-weight:600; color:rgba(250,250,250,0.66);
+    border:1px solid rgba(255,255,255,0.13); background:rgba(255,255,255,0.045);
+    padding:7px 14px; border-radius:999px;
+  }
+  .foot { display:flex; align-items:center; gap:14px; margin-top:32px; font-size:16px; color:rgba(250,250,250,0.44); font-weight:500; }
+  .foot .sep { width:5px; height:5px; border-radius:999px; background:rgba(99,102,241,0.75); }
+
+  .right { position:relative; flex:1; height:404px; }
+  .shot {
+    position:absolute; border-radius:14px; overflow:hidden;
+    border:1px solid rgba(255,255,255,0.16);
+    box-shadow:0 26px 60px rgba(0,0,0,0.62), 0 0 0 1px rgba(99,102,241,0.14);
+    background:#111116;
+  }
+  .shot img { width:100%; height:100%; object-fit:cover; object-position:top center; display:block; }
+  .s1 { width:392px; height:250px; top:6px;  left:0;    transform:rotate(-3.2deg); z-index:3; }
+  .s2 { width:330px; height:212px; top:186px; left:150px; transform:rotate(2.6deg);  z-index:2; }
+  .bar {
+    position:absolute; left:0; right:0; top:0; height:22px;
+    background:rgba(24,24,31,0.97); border-bottom:1px solid rgba(255,255,255,0.09);
+    display:flex; align-items:center; gap:5px; padding-left:9px;
+  }
+  .bar i { width:7px; height:7px; border-radius:999px; background:rgba(255,255,255,0.22); }
+  .shot .imgwrap { position:absolute; inset:22px 0 0 0; }
+</style>
+</head>
+<body>
+  <div class="glow"></div>
+  <div class="dots"></div>
+  <div class="wrap">
+    <div class="left">
+      <div class="pill"><span class="dot"></span> Available for Projects</div>
+      <h1>Ifeanyi<br /><span class="grad">Agada</span></h1>
+      <div class="role">Full-Stack &amp; AI Developer</div>
+      <div class="tag">Websites, web apps and AI systems that grow your business.</div>
+      <div class="stack">
+        <span>Python</span><span>Flask</span><span>FastAPI</span>
+        <span>React</span><span>TypeScript</span><span>AI Agents</span>
+      </div>
+      <div class="foot">
+        <span>github.com/Ifeanyi-design</span>
+        <span class="sep"></span>
+        <span>Nigeria · Remote worldwide</span>
+      </div>
+    </div>
+    <div class="right">
+      <div class="shot s1">
+        <div class="bar"><i></i><i></i><i></i></div>
+        <div class="imgwrap"><img src="public/screenshots/maxcinema-desktop.png" alt="" /></div>
+      </div>
+      <div class="shot s2">
+        <div class="bar"><i></i><i></i><i></i></div>
+        <div class="imgwrap"><img src="public/screenshots/servicesync-landing.png" alt="" /></div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

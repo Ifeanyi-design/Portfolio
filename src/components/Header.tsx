@@ -5,6 +5,7 @@ import { site } from '../data/site';
 const navLinks = [
   { label: 'Work',     href: '#work' },
   { label: 'Services', href: '#services' },
+  { label: 'Process',  href: '#process' },
   { label: 'About',    href: '#about' },
   { label: 'Contact',  href: '#contact' },
 ];
@@ -51,7 +52,7 @@ export default function Header() {
               </a>
 
               {/* Desktop nav */}
-              <nav className="hidden md:flex items-center gap-1" aria-label="Main">
+              <nav className="hidden lg:flex items-center gap-1" aria-label="Main">
                 {navLinks.map((l) => (
                   <a
                     key={l.href}
@@ -65,13 +66,13 @@ export default function Header() {
 
               {/* CTA + hamburger */}
               <div className="flex items-center gap-3">
-                <a href="#contact" className="btn-primary shimmer-badge hidden md:inline-flex py-2 px-5 text-xs">
+                <a href="#contact" className="btn-primary shimmer-badge hidden lg:inline-flex py-2 px-5 text-xs">
                   Let's Talk <ArrowUpRight size={14} />
                 </a>
                 <button
                   onClick={() => setOpen((v) => !v)}
                   aria-label={open ? 'Close menu' : 'Open menu'}
-                  className="md:hidden flex items-center justify-center w-9 h-9 rounded-lg text-ink/60 hover:text-ink hover:bg-surface-hover transition-colors cursor-pointer"
+                  className="lg:hidden flex items-center justify-center w-9 h-9 rounded-lg text-ink/60 hover:text-ink hover:bg-surface-hover transition-colors cursor-pointer"
                 >
                   {open ? <X size={20} /> : <Menu size={20} />}
                 </button>
@@ -81,7 +82,7 @@ export default function Header() {
             {/* Mobile nav */}
             {open && (
               <nav
-                className="md:hidden border-t border-white/5 pt-3 pb-2 mt-3 flex flex-col gap-1 animate-fade-up"
+                className="lg:hidden border-t border-white/5 pt-3 pb-2 mt-3 flex flex-col gap-1 animate-fade-up"
                 aria-label="Mobile"
               >
                 {navLinks.map((l) => (

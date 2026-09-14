@@ -1,13 +1,20 @@
 import { useRef, useState } from 'react';
 import { ArrowRight, ArrowUpRight, FolderOpen, Layers3, Rocket, Globe, Copy, Check, Sparkles } from 'lucide-react';
 import { site } from '../data/site';
+import { projects } from '../data/projects';
+import { services } from '../data/services';
 
-// Verifiable stats only — a visitor can confirm these from the Work section below.
+/** A link is real only when it exists and is not the '#' placeholder. */
+const isRealLink = (href: string | undefined): boolean =>
+  typeof href === 'string' && href.length > 0 && href !== '#';
+
+// Stats are computed from the real data below — a visitor can verify every number
+// by scrolling to the Work and Services sections. No invented metrics.
 const stats = [
-  { icon: FolderOpen, value: '5',    label: 'Projects Shipped' },
-  { icon: Layers3,    value: '3',    label: 'Core Domains' },
-  { icon: Rocket,     value: '4',    label: 'Live Deployments' },
-  { icon: Globe,      value: '100%', label: 'Remote Worldwide' },
+  { icon: FolderOpen, value: String(projects.length),                              label: 'Projects Shipped' },
+  { icon: Rocket,     value: String(projects.filter((p) => isRealLink(p.links.demo)).length), label: 'Live Deployments' },
+  { icon: Layers3,    value: String(services.length),                              label: 'Services Offered' },
+  { icon: Globe,      value: '100%',                                               label: 'Remote Worldwide' },
 ];
 
 const techStack = [

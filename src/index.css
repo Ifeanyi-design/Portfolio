@@ -134,3 +134,26 @@
     z-index: 100;
   }
 }
+
+/* Respect the OS "reduce motion" setting — kills marquees, shimmer and fade-ups.
+   Also keeps the page cheap to render on low-end hardware. */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+  .shimmer-badge::after {
+    display: none;
+  }
+  .card:hover,
+  .btn-primary:hover,
+  .btn-ghost:hover {
+    transform: none;
+  }
+}

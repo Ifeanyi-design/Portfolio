@@ -8,7 +8,7 @@ export interface ProjectLinks {
 }
 
 export interface ProjectImage {
-  /** Path under src/assets/projects, or null → placeholder renders */
+  /** Public path, e.g. '/screenshots/maxcinema-desktop.png'. null → placeholder renders */
   desktop: string | null;
   mobile: string | null;
   /** Alt text describing what the screenshot shows */
@@ -19,6 +19,8 @@ export interface Project {
   id: string;
   /** Outcome title (what it does for the business), never a tech title */
   outcomeTitle: string;
+  /** Drives the Work-section filter tabs */
+  category: 'web' | 'ai';
   problem: string;
   solution: string;
   /** Exactly 3 key features */
@@ -28,6 +30,11 @@ export interface Project {
   links: ProjectLinks;
   /** true → renders "Concept project" label */
   isConcept: boolean;
+  /**
+   * Optional badge shown when the project has no live demo link
+   * (e.g. 'Open Source MCP', 'Personal Series'). Falls back to 'Case Study'.
+   */
+  statusLabel?: string;
 }
 
 export interface Service {

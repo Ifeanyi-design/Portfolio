@@ -2,14 +2,14 @@ import type { Project } from '../types';
 
 /**
  * SINGLE source of truth for project cards.
- * Links marked DUMMY — replace '#' with real URLs.
- * Images are null until you add files to public/screenshots/ —
- * then set image.desktop / image.mobile to e.g. 'screenshots/maxcinema-desktop.jpg'.
+ * Screenshots live in public/screenshots/ — reference them as '/screenshots/<file>.png'.
+ * Set image.desktop to null and a "Screenshot coming soon" placeholder renders instead.
  */
 export const projects: readonly Project[] = [
   {
     id: 'maxcinema',
     outcomeTitle: 'Movie streaming platform that updates itself',
+    category: 'web',
     problem:
       'Running a streaming site means uploading content, organizing categories and serving video files — repetitive work that eats hours.',
     solution:
@@ -31,6 +31,7 @@ export const projects: readonly Project[] = [
   {
     id: 'manga-forge',
     outcomeTitle: 'Browser-based manga & comic creation studio',
+    category: 'web',
     problem:
       'Comic creators juggle heavy desktop tools just to lay out panels, arrange speech bubbles, and manage multi-page storyboards.',
     solution:
@@ -55,6 +56,7 @@ export const projects: readonly Project[] = [
   {
     id: 'atlas',
     outcomeTitle: 'Atlas — Memory & decision guardrails MCP for AI agents',
+    category: 'ai',
     problem:
       'AI coding agents start fresh tasks without prior context, silently reversing architecture decisions or repeating settled engineering debates.',
     solution:
@@ -72,10 +74,35 @@ export const projects: readonly Project[] = [
     },
     links: { demo: '#', github: 'https://github.com/Ifeanyi-design/ATLAS' },
     isConcept: false,
+    statusLabel: 'Open Source MCP',
+  },
+  {
+    id: 'zara-video',
+    outcomeTitle: 'AI video series where the characters stay the same',
+    category: 'ai',
+    problem:
+      'AI-generated video breaks the moment a story needs more than one clip — faces, outfits and style drift, so the final cut looks accidental instead of intentional.',
+    solution:
+      'A repeatable pipeline for a multi-episode Pidgin-language children\u2019s series: script and storyboard first, then generate, stitch, voice and format so the same characters hold across every clip.',
+    features: [
+      'Multi-episode series with the same characters consistent across every clip',
+      'Storyboard-first workflow so each shot generates predictably before stitching',
+      'Finished episodes with voiceover, music and platform-ready aspect ratios',
+    ],
+    stack: ['Google Flow', 'Hailuo / MiniMax', 'ElevenLabs', 'CapCut', 'Storyboarding'],
+    image: {
+      desktop: null, // TODO: add public/screenshots/zara-still.png then set this path
+      mobile: null,
+      alt: 'Stills from the Zara AI video series showing the same characters across multiple clips',
+    },
+    links: { demo: '#', github: '#' }, // TODO: paste the YouTube/series link here
+    isConcept: false,
+    statusLabel: 'Personal Series',
   },
   {
     id: 'servicesync',
     outcomeTitle: 'AI-native home service marketplace with escrow payments',
+    category: 'ai',
     problem:
       'Homeowners face slow responses and opaque pricing, while contractors waste hours triaging inquiries, writing quotes, and chasing payments.',
     solution:
@@ -100,6 +127,7 @@ export const projects: readonly Project[] = [
   {
     id: 'gregbuk',
     outcomeTitle: 'Enterprise web portal for commercial printing & digital ID firm',
+    category: 'web',
     problem:
       'Established corporate service firms struggle with outdated web presence that fails to represent multi-division scale, machinery, and digital ID workflows.',
     solution:

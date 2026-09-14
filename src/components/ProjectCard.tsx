@@ -1,4 +1,4 @@
-import { ExternalLink, GitFork, Film, Palette, BrainCircuit, Zap, Printer, Maximize2 } from 'lucide-react';
+import { ExternalLink, GitFork, Film, Palette, BrainCircuit, Zap, Printer, Clapperboard, Maximize2 } from 'lucide-react';
 import type { Project } from '../types';
 import type { ModalImageData } from './ImageModal';
 
@@ -15,12 +15,19 @@ function ProjectIcon({ id }: { id: string }) {
     'atlas':         <BrainCircuit size={20} />,
     'servicesync':   <Zap size={20} />,
     'gregbuk':       <Printer size={20} />,
+    'zara-video':    <Clapperboard size={20} />,
   };
   return <>{map[id] ?? <Zap size={20} />}</>;
 }
 
+/** A link is real only when it exists and is not the '#' placeholder. */
+function isRealLink(href: string | undefined): href is string {
+  return typeof href === 'string' && href.length > 0 && href !== '#';
+}
+
 export default function ProjectCard({ project, onExpandImage }: Props) {
-  const hasDemo = project.links.demo && project.links.demo !== '#';
+  const hasDemo = isRealLink(project.links.demo);
+  const hasGithub = isRealLink(project.links.github);
 
   return (
     <article className="card group flex flex-col overflow-hidden hover:scale-[1.01]">
@@ -40,15 +47,15 @@ export default function ProjectCard({ project, onExpandImage }: Props) {
               <span className="shrink-0 rounded-md border border-white/10 bg-surface-elevated px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-ink/35">
                 Concept
               </span>
-            ) : !hasDemo ? (
-              <span className="shrink-0 inline-flex items-center gap-1.5 rounded-md border border-accent/30 bg-accent-muted px-2.5 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-accent-light">
-                <span className="h-1.5 w-1.5 rounded-full bg-accent-light" />
-                Open Source MCP
-              </span>
-            ) : (
+            ) : hasDemo ? (
               <span className="shrink-0 inline-flex items-center gap-1.5 rounded-md border border-ok/30 bg-ok/10 px-2.5 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-ok">
                 <span className="h-1.5 w-1.5 rounded-full bg-ok animate-pulse" />
                 Live Project
+              </span>
+            ) : (
+              <span className="shrink-0 inline-flex items-center gap-1.5 rounded-md border border-accent/30 bg-accent-muted px-2.5 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-accent-light">
+                <span className="h-1.5 w-1.5 rounded-full bg-accent-light" />
+                {project.statusLabel ?? 'Case Study'}
               </span>
             )}
           </div>
@@ -124,24 +131,27 @@ export default function ProjectCard({ project, onExpandImage }: Props) {
         ))}
       </div>
 
-      {/* Links */}
+      {/* Links — rendered honestly: only real URLs become buttons */}
       <div className="mt-auto flex gap-2.5 border-t border-surface-border p-6 pt-4">
-        {hasDemo ? (
-          <>
-            <a href={project.links.demo} target="_blank" rel="noopener noreferrer"
-               className="btn-primary flex-1 justify-center py-2.5 text-xs">
-              Live Demo <ExternalLink size={13} />
-            </a>
-            <a href={project.links.github} target="_blank" rel="noopener noreferrer"
-               className="btn-ghost flex-1 justify-center py-2.5 text-xs">
-              <GitFork size={14} /> GitHub
-            </a>
-          </>
-        ) : (
-          <a href={project.links.github} target="_blank" rel="noopener noreferrer"
+        {hasDemo && (
+          <a href={project.links.demo} target="_blank" rel="noopener noreferrer"
              className="btn-primary flex-1 justify-center py-2.5 text-xs">
-            <GitFork size={14} /> View GitHub Repository <ExternalLink size={13} />
+            Live Demo <ExternalLink size={13} />
           </a>
+        )}
+        {hasGithub && (
+          <a href={project.links.github} target="_blank" rel="noopener noreferrer"
+             className={hasDemo
+               ? 'btn-ghost flex-1 justify-center py-2.5 text-xs'
+               : 'btn-primary flex-1 justify-center py-2.5 text-xs'}>
+            <GitFork size={14} /> {hasDemo ? 'GitHub' : 'View GitHub Repository'}
+            {!hasDemo && <ExternalLink size={13} />}
+          </a>
+        )}
+        {!hasDemo && !hasGithub && (
+          <p className="flex-1 text-center text-xs font-medium text-ink/40 py-2.5">
+            Preview available on request — message me
+          </p>
         )}
       </div>
     </article>
