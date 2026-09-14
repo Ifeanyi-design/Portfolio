@@ -91,7 +91,7 @@ export default function ProjectCard({ project, onExpandImage }: Props) {
             <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-accent-muted text-accent-light">
               <ProjectIcon id={project.id} />
             </div>
-            <span className="absolute bottom-3 right-3 text-[10px] font-semibold uppercase tracking-wider text-ink/20">
+            <span className="absolute bottom-3 right-3 text-[10px] font-semibold uppercase tracking-wider text-ink/35">
               Screenshot coming soon
             </span>
           </div>

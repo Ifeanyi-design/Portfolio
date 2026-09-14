@@ -65,10 +65,10 @@ export default function Footer() {
 
         {/* Bottom bar */}
         <div className="mt-12 flex flex-col items-center justify-between gap-2 border-t border-surface-border pt-6 sm:flex-row">
-          <p className="text-xs text-ink/25">
+          <p className="text-xs text-ink/45">
             © {new Date().getFullYear()} {site.name}. All rights reserved.
           </p>
-          <p className="text-xs text-ink/20">
+          <p className="text-xs text-ink/35">
             Built with React · TypeScript · Tailwind CSS
           </p>
         </div>

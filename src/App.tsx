@@ -10,7 +10,7 @@ import Footer from './components/Footer';
 // One-page flow: trust (hero) → proof (work) → offer (services) → person (about) → action (contact).
 export default function App() {
   return (
-    <div id="top" className="bg-surface min-h-screen">
+    <div className="bg-surface min-h-screen">
       <Header />
       <main>
         <Hero />

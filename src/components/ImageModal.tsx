@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import { X, ExternalLink, GitFork } from 'lucide-react';
 
 export interface ModalImageData {
@@ -15,6 +15,13 @@ interface Props {
 }
 
 export default function ImageModal({ data, onClose }: Props) {
+  const closeRef = useRef<HTMLButtonElement>(null);
+
+  // A11y: move keyboard focus to the close button when the dialog opens.
+  useEffect(() => {
+    if (data) closeRef.current?.focus();
+  }, [data]);
+
   useEffect(() => {
     if (!data) return;
 
@@ -79,6 +86,7 @@ export default function ImageModal({ data, onClose }: Props) {
               </a>
             )}
             <button
+              ref={closeRef}
               onClick={onClose}
               aria-label="Close modal"
               className="flex h-8 w-8 items-center justify-center rounded-lg border border-white/10 text-ink/60 transition-colors hover:border-accent/40 hover:bg-white/10 hover:text-ink cursor-pointer"

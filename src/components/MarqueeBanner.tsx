@@ -2,7 +2,7 @@
 const ROW_1 = [
   'React', 'TypeScript', 'Python', 'FastAPI', 'Flask', 'REST APIs', 'PostgreSQL',
   'Tailwind CSS', 'AI Agents', 'Tool-Calling', 'RAG', 'JWT Auth', 'SQLModel',
-  'React Native', 'Zustand', 'Vite', 'Docker',
+  'React Native', 'Zustand', 'Vite',
 ];
 const ROW_2 = [
   'Web Apps', 'Business Automation', 'AI Systems', 'Full-Stack Engineering', 'Escrow Systems',

@@ -1,22 +1,23 @@
-import { useState } from 'react';
-import { ArrowRight, ArrowUpRight, FolderOpen, Layers3, CalendarDays, Globe, Copy, Check, Sparkles } from 'lucide-react';
+import { useRef, useState } from 'react';
+import { ArrowRight, ArrowUpRight, FolderOpen, Layers3, Rocket, Globe, Copy, Check, Sparkles } from 'lucide-react';
 import { site } from '../data/site';
 
+// Verifiable stats only — a visitor can confirm these from the Work section below.
 const stats = [
-  { icon: FolderOpen,   value: '5+',  label: 'Production Apps' },
-  { icon: Layers3,      value: '3',   label: 'Core Domains'   },
-  { icon: CalendarDays, value: '2+',  label: 'Years Building' },
-  { icon: Globe,        value: '100%',label: 'Remote Worldwide'},
+  { icon: FolderOpen, value: '5',    label: 'Projects Shipped' },
+  { icon: Layers3,    value: '3',    label: 'Core Domains' },
+  { icon: Rocket,     value: '4',    label: 'Live Deployments' },
+  { icon: Globe,      value: '100%', label: 'Remote Worldwide' },
 ];
 
 const techStack = [
   'Python', 'Flask', 'FastAPI', 'React', 'TypeScript',
-  'PostgreSQL', 'AI Agents', 'MCP', 'Docker', 'Tailwind CSS',
+  'PostgreSQL', 'AI Agents', 'MCP', 'Tailwind CSS',
 ];
 
 export default function Hero() {
   const [copied, setCopied] = useState(false);
-  const [mousePos, setMousePos] = useState({ x: 50, y: 50 });
+  const spotlightRef = useRef<HTMLDivElement>(null);
 
   const handleCopyEmail = () => {
     navigator.clipboard.writeText(site.email);
@@ -24,36 +25,42 @@ export default function Hero() {
     setTimeout(() => setCopied(false), 2200);
   };
 
+  // Perf: mutate the spotlight's style directly instead of setState —
+  // a mousemove-driven re-render of the whole Hero would jank on low-end hardware.
   const handleMouseMove = (e: React.MouseEvent<HTMLElement>) => {
+    const el = spotlightRef.current;
+    if (!el) return;
     const rect = e.currentTarget.getBoundingClientRect();
     const x = ((e.clientX - rect.left) / rect.width) * 100;
     const y = ((e.clientY - rect.top) / rect.height) * 100;
-    setMousePos({ x, y });
+    el.style.background = `radial-gradient(650px circle at ${x}% ${y}%, rgba(99,102,241,0.12), transparent 70%)`;
   };
 
   return (
     <section
-      id="top"
       onMouseMove={handleMouseMove}
-      className="relative min-h-screen hero-glow dot-grid overflow-hidden pt-40 pb-24 transition-colors duration-500"
+      className="relative min-h-screen hero-glow dot-grid overflow-hidden pt-40 pb-24"
     >
-      {/* Dynamic Cursor Spotlight Effect */}
+      {/* Cursor spotlight — style mutated via ref, no re-render (see handleMouseMove) */}
       <div
+        ref={spotlightRef}
         aria-hidden
-        className="pointer-events-none absolute inset-0 transition-opacity duration-300 opacity-60"
+        className="pointer-events-none absolute inset-0 opacity-60"
         style={{
-          background: `radial-gradient(650px circle at ${mousePos.x}% ${mousePos.y}%, rgba(99,102,241,0.12), transparent 70%)`,
+          background: 'radial-gradient(650px circle at 50% 50%, rgba(99,102,241,0.12), transparent 70%)',
         }}
       />
 
-      {/* Floating kinetic orbs */}
+      {/* Ambient accent washes — pre-blurred gradients, no CSS filter (cheap on old GPUs) */}
       <div
         aria-hidden
-        className="pointer-events-none absolute -left-20 top-20 h-96 w-96 rounded-full bg-accent/15 blur-[100px] animate-float"
+        className="pointer-events-none absolute -left-24 top-10 h-[26rem] w-[26rem]"
+        style={{ background: 'radial-gradient(circle at center, rgba(99,102,241,0.14), transparent 62%)' }}
       />
       <div
         aria-hidden
-        className="pointer-events-none absolute -right-20 top-60 h-96 w-96 rounded-full bg-accent/10 blur-[110px] animate-float-reverse"
+        className="pointer-events-none absolute -right-24 top-80 h-[30rem] w-[30rem]"
+        style={{ background: 'radial-gradient(circle at center, rgba(99,102,241,0.10), transparent 62%)' }}
       />
 
       <div className="relative mx-auto max-w-6xl px-4 sm:px-6">

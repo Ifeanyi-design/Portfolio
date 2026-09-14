@@ -64,7 +64,7 @@ export const projects: readonly Project[] = [
       'Dual storage support: local SQLite or production PostgreSQL + pgvector',
       'Live audit dashboard with decision timelines and token-avoided metrics',
     ],
-    stack: ['Python', 'FastAPI', 'MCP', 'PostgreSQL', 'pgvector', 'SQLite', 'Docker'],
+    stack: ['Python', 'FastAPI', 'MCP', 'PostgreSQL', 'pgvector', 'SQLite'],
     image: {
       desktop: '/screenshots/atlas-dashboard.png',
       mobile: null,

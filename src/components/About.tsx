@@ -4,7 +4,7 @@ import { site } from '../data/site';
 const skills = [
   'Python', 'FastAPI', 'Flask', 'React', 'TypeScript', 'REST APIs',
   'PostgreSQL', 'SQLModel', 'SQLAlchemy', 'JWT Auth', 'AI Agents',
-  'MCP Servers', 'pgvector', 'Tool-Calling', 'RAG', 'Celery', 'Tailwind CSS', 'Docker',
+  'MCP Servers', 'pgvector', 'Tool-Calling', 'RAG', 'Celery', 'Tailwind CSS',
 ];
 
 const highlights = [
@@ -121,7 +121,7 @@ export default function About() {
               </div>
               <span className="hidden sm:inline-flex items-center gap-1.5 rounded-full border border-ok/25 bg-ok/10 px-3 py-1 text-[11px] font-semibold text-ok">
                 <span className="h-1.5 w-1.5 rounded-full bg-ok" />
-                Active Now
+                Available Now
               </span>
             </div>
 

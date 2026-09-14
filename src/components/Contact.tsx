@@ -53,7 +53,7 @@ export default function Contact() {
             <div>
               <div className="inline-flex items-center gap-2 rounded-full border border-ok/25 bg-ok/10 px-3 py-1 text-xs font-semibold text-ok mb-4">
                 <Clock size={12} />
-                <span>Typical response: Under 4 hours</span>
+                <span>I reply to every message — usually the same day</span>
               </div>
               <h2 className="text-4xl font-black leading-tight sm:text-5xl">
                 Have a project <span className="text-gradient">in mind?</span>

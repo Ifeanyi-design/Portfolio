@@ -14,6 +14,11 @@
   }
   h1, h2, h3, h4 { @apply font-bold tracking-tight; }
 
+  /* Fixed glass header is ~5.5rem tall — keep anchored sections clear of it */
+  [id] {
+    scroll-margin-top: 6.5rem;
+  }
+
   ::selection {
     background-color: rgba(99, 102, 241, 0.35);
     color: #fff;
@@ -24,47 +29,15 @@
   ::-webkit-scrollbar-thumb:hover { background: rgba(99,102,241,0.6); }
 }
 
-@keyframes floatSlow {
-  0%, 100% { transform: translateY(0px) rotate(0deg); }
-  50% { transform: translateY(-14px) rotate(1deg); }
-}
-
-@keyframes floatReverse {
-  0%, 100% { transform: translateY(0px) rotate(0deg); }
-  50% { transform: translateY(12px) rotate(-1deg); }
-}
-
-@keyframes pulseGlow {
-  0%, 100% { opacity: 0.35; transform: scale(1); }
-  50% { opacity: 0.6; transform: scale(1.06); }
-}
-
 @keyframes shimmerEffect {
   0% { transform: translateX(-100%); }
   100% { transform: translateX(200%); }
 }
 
 @layer utilities {
-  /* ── Smooth Floating animations ── */
-  .animate-float {
-    animation: floatSlow 6s ease-in-out infinite;
-  }
-  .animate-float-reverse {
-    animation: floatReverse 7s ease-in-out infinite;
-  }
-  .animate-glow-pulse {
-    animation: pulseGlow 4s ease-in-out infinite;
-  }
-
   /* ── Gradient text ── */
   .text-gradient {
     background: linear-gradient(125deg, #A5B4FC 0%, #6366F1 50%, #4F46E5 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-  }
-  .text-gradient-subtle {
-    background: linear-gradient(180deg, #FFFFFF 0%, rgba(255,255,255,0.7) 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -89,14 +62,6 @@
     background:
       radial-gradient(ellipse 80% 55% at 50% -5%, rgba(99,102,241,0.28) 0%, transparent 68%),
       #09090B;
-  }
-
-  /* ── Section divider ── */
-  .section-divider {
-    border: none;
-    height: 1px;
-    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.08) 50%, transparent);
-    margin: 0;
   }
 
   /* ── Shimmer button reflection ── */
@@ -167,27 +132,5 @@
     background: linear-gradient(90deg, #6366F1, #818CF8, #A5B4FC);
     transform-origin: 0% 50%;
     z-index: 100;
-  }
-}
-
-/* Modern Scroll-driven reveal (supported in Chrome 115+, Edge 115+, Safari 26+) */
-@media (prefers-reduced-motion: no-preference) {
-  @supports ((animation-timeline: view()) and (animation-range: entry)) {
-    @keyframes scrollFadeUp {
-      from {
-        opacity: 0.1;
-        transform: translateY(28px) scale(0.98);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0) scale(1);
-      }
-    }
-
-    .scroll-reveal {
-      animation: scrollFadeUp auto cubic-bezier(0.16, 1, 0.3, 1) both;
-      animation-timeline: view();
-      animation-range: entry 10% cover 30%;
-    }
   }
 }
