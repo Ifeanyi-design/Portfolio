@@ -169,20 +169,20 @@ export default function Hero() {
             </div>
 
             {/* Stack Panel */}
-            <div className="card p-5.5">
-              <div className="flex items-center justify-between mb-3.5">
-                <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-ink/40">
+            <div className="card p-6 sm:p-7 shadow-lg">
+              <div className="flex items-center justify-between mb-4">
+                <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-ink/40">
                   Primary Tech Stack
                 </p>
-                <span className="text-[10px] font-semibold text-accent-light bg-accent-muted px-2 py-0.5 rounded-md">
+                <span className="text-[10px] font-semibold text-accent-light bg-accent-muted px-2.5 py-1 rounded-md border border-accent/20">
                   Production Tested
                 </span>
               </div>
-              <div className="flex flex-wrap gap-2">
+              <div className="flex flex-wrap gap-2.5">
                 {techStack.map((t) => (
                   <span
                     key={t}
-                    className="rounded-full border border-white/8 bg-surface-elevated px-3 py-1.5 text-xs font-medium text-ink/65 transition-all hover:border-accent/40 hover:text-accent-light hover:scale-105 cursor-default"
+                    className="rounded-full border border-white/10 bg-surface-elevated px-3.5 py-2 text-xs font-medium text-ink/70 transition-all hover:border-accent/40 hover:text-accent-light hover:scale-105 cursor-default shadow-sm"
                   >
                     {t}
                   </span>
