@@ -1,0 +1,94 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+  body {
+    @apply bg-surface font-sans text-ink antialiased;
+    background-color: #09090B;
+    color: #FAFAFA;
+  }
+  h1, h2, h3, h4 { @apply font-bold tracking-tight; }
+
+  ::selection {
+    background-color: rgba(99, 102, 241, 0.3);
+    color: #fff;
+  }
+  ::-webkit-scrollbar        { width: 5px; }
+  ::-webkit-scrollbar-track  { background: #09090B; }
+  ::-webkit-scrollbar-thumb  { background: rgba(99,102,241,0.4); border-radius: 4px; }
+}
+
+@layer utilities {
+  /* ── Gradient text (single indigo palette) ── */
+  .text-gradient {
+    background: linear-gradient(125deg, #818CF8 0%, #6366F1 50%, #4F46E5 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  /* ── Glass card ── */
+  .glass {
+    background: rgba(17, 17, 22, 0.75);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    border: 1px solid rgba(255,255,255,0.07);
+  }
+
+  /* ── Dot grid pattern ── */
+  .dot-grid {
+    background-image: radial-gradient(rgba(99,102,241,0.12) 1px, transparent 1px);
+    background-size: 32px 32px;
+  }
+
+  /* ── Hero page glow ── */
+  .hero-glow {
+    background:
+      radial-gradient(ellipse 75% 55% at 50% -5%, rgba(99,102,241,0.32) 0%, transparent 65%),
+      #09090B;
+  }
+
+  /* ── Subtle section divider ── */
+  .section-divider {
+    border: none;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.06) 50%, transparent);
+    margin: 0;
+  }
+
+  /* ── Button variants ── */
+  .btn-primary {
+    @apply inline-flex items-center gap-2 rounded-full bg-accent px-6 py-3 text-sm font-semibold text-white transition-all duration-200;
+    box-shadow: 0 0 0 1px rgba(99,102,241,0.5), 0 4px 16px rgba(99,102,241,0.25);
+  }
+  .btn-primary:hover {
+    background-color: #4F46E5;
+    box-shadow: 0 0 0 1px rgba(99,102,241,0.7), 0 6px 24px rgba(99,102,241,0.35);
+    transform: translateY(-1px);
+  }
+  .btn-ghost {
+    @apply inline-flex items-center gap-2 rounded-full border px-6 py-3 text-sm font-semibold text-ink/70 transition-all duration-200;
+    border-color: rgba(255,255,255,0.1);
+    background: rgba(255,255,255,0.03);
+  }
+  .btn-ghost:hover {
+    border-color: rgba(99,102,241,0.4);
+    color: #818CF8;
+    background: rgba(99,102,241,0.06);
+    transform: translateY(-1px);
+  }
+
+  /* ── Card base ── */
+  .card {
+    @apply rounded-2xl border bg-surface-card transition-all duration-200;
+    border-color: rgba(255,255,255,0.07);
+  }
+  .card:hover {
+    border-color: rgba(99,102,241,0.3);
+    box-shadow: 0 4px 24px rgba(99,102,241,0.12);
+  }
+}
