@@ -1,36 +1,84 @@
-import { useRef, useState } from 'react';
-import { ArrowRight, ArrowUpRight, FolderOpen, Layers3, Rocket, Globe, Copy, Check, Sparkles } from 'lucide-react';
+import { useRef } from 'react';
+import {
+  ArrowRight, ArrowUpRight, FolderOpen, Rocket, Trophy, Briefcase,
+  GraduationCap, Users, Sparkles,
+} from 'lucide-react';
 import { site } from '../data/site';
 import { projects } from '../data/projects';
-import { services } from '../data/services';
+import { experience } from '../data/experience';
+import { recognitions } from '../data/recognition';
 
 /** A link is real only when it exists and is not the '#' placeholder. */
 const isRealLink = (href: string | undefined): boolean =>
   typeof href === 'string' && href.length > 0 && href !== '#';
 
-// Stats are computed from the real data below — a visitor can verify every number
-// by scrolling to the Work and Services sections. No invented metrics.
+// Every number is computed from the real data files, so a recruiter can verify
+// it by scrolling — and it can never drift out of sync. No invented metrics,
+// and none of the old marketing figures ("100% Remote Worldwide") survive.
 const stats = [
-  { icon: FolderOpen, value: String(projects.length),                              label: 'Projects Shipped' },
-  { icon: Rocket,     value: String(projects.filter((p) => isRealLink(p.links.demo)).length), label: 'Live Deployments' },
-  { icon: Layers3,    value: String(services.length),                              label: 'Services Offered' },
-  { icon: Globe,      value: '100%',                                               label: 'Remote Worldwide' },
+  { icon: FolderOpen, value: String(projects.length),                                              label: 'Projects & Builds' },
+  { icon: Rocket,     value: String(projects.filter((p) => isRealLink(p.links.demo)).length),       label: 'Live Deployments' },
+  { icon: Trophy,     value: String(recognitions.length),                                           label: 'Competition Awards' },
+  { icon: Briefcase,  value: String(experience.length),                                             label: 'IT / SIWES Placement' },
 ];
 
-const techStack = [
-  'Python', 'Flask', 'FastAPI', 'React', 'TypeScript',
-  'PostgreSQL', 'AI Agents', 'MCP', 'Tailwind CSS',
+// Mirrors the detail in the Experience / Education / Recognition sections —
+// the hero exists so a recruiter gets the whole profile in one screen.
+const glance = [
+  {
+    icon: GraduationCap,
+    label: 'B.Sc. Computer Science',
+    detail: 'University of Ibadan · current student',
+  },
+  {
+    icon: Briefcase,
+    label: 'IT / Software Development Intern',
+    detail: 'HIIT PLC · May – Aug 2026',
+  },
+  {
+    icon: Trophy,
+    label: '1st Place — IESA Forge the Future Hackathon 2026',
+    detail: 'IntelliCT · computer vision, built with the team',
+  },
+  {
+    icon: Users,
+    label: 'Team Devions',
+    detail: 'Admin / Technical Contributor',
+  },
 ];
+
+/** Shared by the desktop column and the mobile stack below it. */
+function GlanceCard() {
+  return (
+    <div className="card p-6 shadow-lg">
+      <div className="mb-4 flex items-center justify-between gap-3">
+        <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-ink/40">
+          At a Glance
+        </p>
+        <span className="rounded-md border border-accent/20 bg-accent-muted px-2.5 py-1 text-[10px] font-semibold text-accent-light">
+          Student · Engineer
+        </span>
+      </div>
+
+      <ul className="space-y-3.5">
+        {glance.map(({ icon: Icon, label, detail }) => (
+          <li key={label} className="flex items-start gap-3">
+            <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg border border-accent/20 bg-accent-muted text-accent-light">
+              <Icon size={15} />
+            </span>
+            <span className="min-w-0">
+              <span className="block text-xs font-bold leading-snug text-ink">{label}</span>
+              <span className="mt-0.5 block text-[11px] leading-[1.5] text-ink/40">{detail}</span>
+            </span>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}
 
 export default function Hero() {
-  const [copied, setCopied] = useState(false);
   const spotlightRef = useRef<HTMLDivElement>(null);
-
-  const handleCopyEmail = () => {
-    navigator.clipboard.writeText(site.email);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2200);
-  };
 
   // Perf: mutate the spotlight's style directly instead of setState —
   // a mousemove-driven re-render of the whole Hero would jank on low-end hardware.
@@ -45,6 +93,7 @@ export default function Hero() {
 
   return (
     <section
+      id="top"
       onMouseMove={handleMouseMove}
       className="relative min-h-screen hero-glow dot-grid overflow-hidden pt-40 pb-24"
     >
@@ -82,8 +131,8 @@ export default function Hero() {
                 <span className="h-2 w-2 rounded-full bg-ok animate-pulse" />
                 {site.availability}
               </div>
-              <span className="hidden sm:inline-flex items-center gap-1.5 rounded-full border border-white/10 bg-surface-elevated/80 px-3 py-1 text-xs font-medium text-ink/60">
-                <Sparkles size={12} className="text-accent-light" /> Full-Stack & AI Engineer
+              <span className="inline-flex items-center gap-1.5 rounded-full border border-white/10 bg-surface-elevated/80 px-3 py-1 text-xs font-medium text-ink/60">
+                <Sparkles size={12} className="text-accent-light" /> {site.shortRole}
               </span>
             </div>
 
@@ -104,6 +153,12 @@ export default function Hero() {
               {site.role}
             </p>
 
+            {/* Student line — the first thing a recruiter should register */}
+            <p className="mt-3 inline-flex items-center gap-2 text-sm font-medium text-ink/50">
+              <GraduationCap size={15} className="shrink-0 text-accent-light" aria-hidden />
+              {site.intro}
+            </p>
+
             {/* Value Proposition */}
             <p className="mt-5 max-w-lg text-base leading-[1.8] text-ink/60">
               {site.valueProp}
@@ -114,27 +169,12 @@ export default function Hero() {
               <a href="#work" className="btn-primary">
                 View My Work <ArrowRight size={16} />
               </a>
-              <a href="#contact" className="btn-ghost">
-                Start a Project <ArrowUpRight size={16} />
+              <a href="#experience" className="btn-ghost">
+                View Experience <ArrowUpRight size={16} />
               </a>
-              {/* Quick copy email pill */}
-              <button
-                onClick={handleCopyEmail}
-                title="Copy email to clipboard"
-                className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-surface-elevated px-4 py-3 text-xs font-semibold text-ink/60 transition-all hover:border-accent/40 hover:text-ink cursor-pointer active:scale-95"
-              >
-                {copied ? (
-                  <>
-                    <Check size={14} className="text-ok" />
-                    <span className="text-ok font-bold">Email Copied!</span>
-                  </>
-                ) : (
-                  <>
-                    <Copy size={14} />
-                    <span>Copy Email</span>
-                  </>
-                )}
-              </button>
+              <a href="#contact" className="btn-ghost">
+                Let's Talk
+              </a>
             </div>
 
             {/* Social row */}
@@ -157,7 +197,7 @@ export default function Hero() {
             </div>
           </div>
 
-          {/* ── Right Column: Interactive Stats & Tech Grid ── */}
+          {/* ── Right Column: facts a recruiter can verify ── */}
           <div className="hidden lg:flex flex-col gap-3.5 animate-fade-up">
 
             {/* 2×2 Stat Tiles */}
@@ -182,46 +222,14 @@ export default function Hero() {
               ))}
             </div>
 
-            {/* Stack Panel */}
-            <div className="card p-6 sm:p-7 shadow-lg">
-              <div className="flex items-center justify-between mb-4">
-                <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-ink/40">
-                  Primary Tech Stack
-                </p>
-                <span className="text-[10px] font-semibold text-accent-light bg-accent-muted px-2.5 py-1 rounded-md border border-accent/20">
-                  Production Tested
-                </span>
-              </div>
-              <div className="flex flex-wrap gap-2.5">
-                {techStack.map((t) => (
-                  <span
-                    key={t}
-                    className="rounded-full border border-white/10 bg-surface-elevated px-3.5 py-2 text-xs font-medium text-ink/70 transition-all hover:border-accent/40 hover:text-accent-light hover:scale-105 cursor-default shadow-sm"
-                  >
-                    {t}
-                  </span>
-                ))}
-              </div>
-            </div>
+            <GlanceCard />
           </div>
 
         </div>
 
-        {/* Mobile Stack Summary */}
-        <div className="card mt-10 p-5 lg:hidden animate-fade-up">
-          <p className="mb-3 text-[10px] font-bold uppercase tracking-[0.18em] text-ink/40">
-            Primary Tech Stack
-          </p>
-          <div className="flex flex-wrap gap-2">
-            {techStack.map((t) => (
-              <span
-                key={t}
-                className="rounded-full border border-white/8 bg-surface-hover px-3 py-1 text-xs font-medium text-ink/60"
-              >
-                {t}
-              </span>
-            ))}
-          </div>
+        {/* Mobile summary */}
+        <div className="mt-10 lg:hidden animate-fade-up">
+          <GlanceCard />
         </div>
       </div>
     </section>

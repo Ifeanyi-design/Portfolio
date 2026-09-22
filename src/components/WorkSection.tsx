@@ -46,12 +46,13 @@ export default function WorkSection() {
               Things I've <span className="text-gradient">Built</span>
             </h2>
             <p className="mt-3 max-w-xl text-sm leading-[1.8] text-ink/50">
-              {counts.all} shipped applications across web platforms, AI systems and developer tools.
-              Click any screenshot for an enlarged view.
+              {counts.all} projects across backend systems, AI engineering, computer vision and
+              product development. Each card states my role — several were built with a team, and
+              the ones that were are labelled as such.
             </p>
           </div>
-          <a href="#contact" className="btn-ghost shrink-0 text-xs py-2.5">
-            Start a Project <ArrowUpRight size={14} />
+          <a href="#experience" className="btn-ghost shrink-0 text-xs py-2.5">
+            View Experience <ArrowUpRight size={14} />
           </a>
         </div>
 

@@ -1,15 +1,16 @@
-import { PhoneCall, FileCheck2, Hammer, Rocket, Check } from 'lucide-react';
+import { MessageCircle, FileCheck2, Hammer, Rocket, Check } from 'lucide-react';
 
 /**
- * Process section — built for the non-technical business owner who is deciding
- * whether hiring a developer is risky. It answers "what actually happens if I
- * message this person?" before they have to ask.
+ * Process section — for the client-side visitor who is deciding whether
+ * commissioning a developer is risky. It answers "what actually happens if I
+ * message this person?" before they have to ask. Kept deliberately secondary:
+ * it sits below the professional content, not above it.
  */
 const steps = [
   {
-    icon: PhoneCall,
-    title: 'Free 15-minute call',
-    desc: 'You tell me what the business needs in plain language. No jargon, no obligation, no charge.',
+    icon: MessageCircle,
+    title: 'Free intro conversation',
+    desc: 'You describe what the product needs in plain language — by message or call, whichever suits you. No jargon, no obligation, no charge.',
   },
   {
     icon: FileCheck2,
@@ -44,14 +45,14 @@ export default function Process() {
         {/* Header */}
         <div className="mb-14 max-w-2xl">
           <p className="mb-2 text-xs font-bold uppercase tracking-[0.18em] text-accent-light">
-            The Process
+            For Client Work
           </p>
           <h2 className="text-4xl font-black leading-tight sm:text-5xl">
-            Hiring me is <span className="text-gradient">low risk</span>
+            How a project <span className="text-gradient">actually runs</span>
           </h2>
           <p className="mt-4 text-sm leading-[1.85] text-ink/55">
-            Most business owners have been burned by a developer who went quiet halfway through.
-            Here is exactly how a project with me runs, from first message to launch.
+            If you are commissioning work rather than hiring me onto a team, here is exactly what
+            happens from first message to launch — so there is nothing left to guess at.
           </p>
         </div>
 
@@ -93,7 +94,7 @@ export default function Process() {
             </ul>
           </div>
           <a href="#contact" className="btn-primary shrink-0 justify-center text-sm py-3 px-6">
-            Book the free call
+            Start a conversation
           </a>
         </div>
       </div>

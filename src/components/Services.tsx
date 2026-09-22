@@ -18,18 +18,19 @@ export default function Services() {
         <div className="mb-16 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
           <div>
             <p className="mb-2 text-xs font-bold uppercase tracking-[0.18em] text-accent-light">
-              My Specialization
+              Services
             </p>
             <h2 className="text-4xl font-black leading-tight sm:text-5xl">
-              How I Bring{' '}
-              <span className="text-gradient">Ideas to Life</span>
+              Freelance &{' '}
+              <span className="text-gradient">Product Work</span>
             </h2>
             <p className="mt-3 max-w-lg text-sm leading-[1.8] text-ink/50">
-              Tailored development services for startups, businesses, and founders who need production software delivered on time.
+              Alongside my degree, internship and team projects I take on client work — the same
+              engineering, applied to a product you own. These are the areas I can help with.
             </p>
           </div>
           <a href="#contact" className="btn-ghost shrink-0 text-xs py-2.5 px-5">
-            Work With Me <ArrowUpRight size={14} />
+            Discuss a Project <ArrowUpRight size={14} />
           </a>
         </div>
 
@@ -94,7 +95,7 @@ export default function Services() {
                     href="#contact"
                     className="btn-ghost shrink-0 text-xs py-2.5 px-5 self-start sm:self-auto shadow-sm"
                   >
-                    Inquire About This <ArrowUpRight size={13} />
+                    Get in Touch <ArrowUpRight size={13} />
                   </a>
                 </div>
               </div>

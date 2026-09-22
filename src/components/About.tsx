@@ -1,27 +1,21 @@
-import { MapPin, ArrowUpRight, Code, Cpu, Layers } from 'lucide-react';
+import { MapPin, ArrowUpRight, Code, Cpu, Layers, GraduationCap } from 'lucide-react';
 import { site } from '../data/site';
-
-const skills = [
-  'Python', 'FastAPI', 'Flask', 'React', 'TypeScript', 'REST APIs',
-  'PostgreSQL', 'SQLModel', 'SQLAlchemy', 'JWT Auth', 'AI Agents',
-  'MCP Servers', 'pgvector', 'Tool-Calling', 'RAG', 'Celery', 'Tailwind CSS',
-];
 
 const highlights = [
   {
     icon: Code,
-    title: 'Full-Stack Architecture',
-    desc: 'Python & FastAPI/Flask backends, normalized PostgreSQL databases, JWT auth, and async Celery queues.',
+    title: 'Backend & API Engineering',
+    desc: 'Python with FastAPI and Flask, normalized PostgreSQL databases, JWT auth and background jobs with Celery.',
   },
   {
     icon: Cpu,
-    title: 'AI Systems & MCP',
-    desc: 'Custom MCP servers, Gemini/Claude integrations, tool-calling agents, and semantic search with pgvector.',
+    title: 'AI Systems & Agents',
+    desc: 'Custom MCP servers, LLM integrations, tool-calling agents and semantic search with pgvector.',
   },
   {
     icon: Layers,
-    title: 'Modern Frontends',
-    desc: 'React, TypeScript, Tailwind CSS, interactive canvas editors, and responsive mobile-first interfaces.',
+    title: 'Full-Stack Delivery',
+    desc: 'React and TypeScript interfaces, an interactive canvas editor, and responsive mobile-first layouts.',
   },
 ];
 
@@ -50,7 +44,8 @@ export default function About() {
             <blockquote className="mt-8 rounded-2xl border border-accent/25 bg-accent-muted/80 p-6 shadow-sm transition-all hover:border-accent/40">
               <span className="block mb-2 text-3xl font-serif leading-none text-accent/50">"</span>
               <p className="text-base font-semibold leading-[1.8] text-ink/85 italic">
-                I like understanding how systems work underneath, not just calling APIs — which means the code I build for you is debuggable, documented, and built to scale.
+                I like understanding how systems work underneath, not just calling APIs — so the
+                software I write stays debuggable, documented and maintainable.
               </p>
             </blockquote>
 
@@ -58,14 +53,15 @@ export default function About() {
             <div className="mt-6 flex flex-wrap gap-2">
               <span className="inline-flex items-center gap-1.5 rounded-full border border-ok/25 bg-ok/10 px-3.5 py-1.5 text-xs font-semibold text-ok">
                 <span className="h-1.5 w-1.5 rounded-full bg-ok animate-pulse" />
-                Available for Contract & Full-Time
+                {site.availability}
+              </span>
+              <span className="inline-flex items-center gap-1.5 rounded-full border border-white/8 bg-surface-elevated px-3.5 py-1.5 text-xs font-semibold text-ink/55">
+                <GraduationCap size={11} className="text-accent-light" />
+                B.Sc. Computer Science
               </span>
               <span className="inline-flex items-center gap-1.5 rounded-full border border-white/8 bg-surface-elevated px-3.5 py-1.5 text-xs font-semibold text-ink/55">
                 <MapPin size={11} className="text-accent-light" />
                 {site.location}
-              </span>
-              <span className="inline-flex items-center gap-1.5 rounded-full border border-white/8 bg-surface-elevated px-3.5 py-1.5 text-xs font-semibold text-ink/55">
-                Computer Science
               </span>
             </div>
 
@@ -87,19 +83,14 @@ export default function About() {
               ))}
             </div>
 
-            {/* Skills tag cloud */}
+            {/* Interests — direction of travel, deliberately not a second skills list */}
             <div className="mt-8">
               <p className="mb-3 text-[10px] font-bold uppercase tracking-[0.2em] text-ink/35">
-                Technical Proficiencies
+                Interests
               </p>
-              <div className="flex flex-wrap gap-2">
-                {skills.map((s) => (
-                  <span
-                    key={s}
-                    className="rounded-full border border-white/8 bg-surface-elevated px-3 py-1.5 text-xs font-medium text-ink/60 transition-all hover:border-accent/40 hover:text-accent-light hover:scale-105 cursor-default"
-                  >
-                    {s}
-                  </span>
+              <div className="flex flex-wrap gap-1.5">
+                {site.interests.map((interest) => (
+                  <span key={interest} className="chip">{interest}</span>
                 ))}
               </div>
             </div>
@@ -116,7 +107,7 @@ export default function About() {
                 <div>
                   <h3 className="text-lg font-bold text-ink">{site.name}</h3>
                   <p className="text-xs font-medium text-accent-light mt-0.5">{site.role}</p>
-                  <p className="text-xs text-ink/40 mt-1">Computer Science Student & Software Engineer</p>
+                  <p className="text-xs text-ink/40 mt-1">Computer Science Student · AI & Software Engineer</p>
                 </div>
               </div>
               <span className="hidden sm:inline-flex items-center gap-1.5 rounded-full border border-ok/25 bg-ok/10 px-3 py-1 text-[11px] font-semibold text-ok">
@@ -135,8 +126,8 @@ export default function About() {
             {/* Action buttons */}
             <div className="card p-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
               <div>
-                <p className="text-xs font-bold text-ink">Ready to talk or hire?</p>
-                <p className="text-xs text-ink/40 mt-0.5">Let's discuss timelines and requirements.</p>
+                <p className="text-xs font-bold text-ink">Open to opportunities?</p>
+                <p className="text-xs text-ink/40 mt-0.5">Tell me about the role, the team, or the project.</p>
               </div>
               <div className="flex flex-wrap gap-2.5">
                 <a href={`mailto:${site.email}`} className="btn-primary text-xs py-2.5 px-5">

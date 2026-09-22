@@ -1,0 +1,358 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<!--
+  Fiverr gig-image generator. Render one variant at a time with headless Chrome:
+    chrome --headless=new --window-size=1280,769 --screenshot=out.png \
+      "file:///.../gig-images.template.html#ai-1"
+  Variants: flask-1 flask-2 flask-3 ai-1 ai-2 ai-3
+  Spec: 1280x769, max ~10 words of text, must relate to the service, real screenshots only.
+-->
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html,body { width:1280px; height:769px; overflow:hidden; }
+  body { font-family:'Segoe UI','Inter',system-ui,Arial,sans-serif; background:#0A0A0F; color:#FAFAFA; }
+
+  .stage { position:relative; width:1280px; height:769px; overflow:hidden; display:none; }
+  .stage.on { display:block; }
+
+  .glow-a { position:absolute; inset:0;
+    background:radial-gradient(ellipse 62% 58% at 18% -8%, rgba(99,102,241,0.34) 0%, transparent 64%),
+               radial-gradient(ellipse 50% 52% at 100% 106%, rgba(99,102,241,0.20) 0%, transparent 66%); }
+  .glow-b { position:absolute; inset:0;
+    background:radial-gradient(ellipse 62% 58% at 16% -8%, rgba(52,211,153,0.24) 0%, transparent 64%),
+               radial-gradient(ellipse 52% 54% at 100% 106%, rgba(99,102,241,0.22) 0%, transparent 66%); }
+  .dots { position:absolute; inset:0;
+    background-image:radial-gradient(rgba(99,102,241,0.14) 1px, transparent 1px);
+    background-size:32px 32px;
+    -webkit-mask-image:linear-gradient(to bottom, black 0%, transparent 76%);
+    mask-image:linear-gradient(to bottom, black 0%, transparent 76%); }
+
+  /* ── shared layout ── */
+  .split { position:relative; height:100%; display:flex; align-items:center; padding:0 64px; gap:40px; }
+  .col-text { width:470px; flex-shrink:0; }
+  .col-shot { position:relative; flex:1; height:430px; }
+
+  h1 { font-size:46px; line-height:1.08; font-weight:800; letter-spacing:-1.4px; }
+  h1 .accent { color:#A5B4FC; }
+  h1 .mint { color:#6EE7B7; }
+  .kicker { display:inline-flex; align-items:center; gap:8px; font-size:12.5px; font-weight:700;
+    letter-spacing:2.4px; text-transform:uppercase; color:#A5B4FC;
+    border:1px solid rgba(99,102,241,0.4); background:rgba(99,102,241,0.13);
+    padding:7px 14px; border-radius:999px; margin-bottom:22px; }
+  .kicker.mint { color:#6EE7B7; border-color:rgba(52,211,153,0.42); background:rgba(52,211,153,0.12); }
+  .sub { margin-top:20px; font-size:19px; font-weight:600; color:rgba(250,250,250,0.62); letter-spacing:-0.2px; }
+  .meta { margin-top:26px; display:flex; align-items:center; gap:12px; font-size:14.5px;
+    font-weight:600; color:rgba(250,250,250,0.42); }
+  .meta i { width:5px; height:5px; border-radius:999px; background:rgba(99,102,241,0.8); }
+
+  /* ── browser-frame screenshot ── */
+  .frame { position:absolute; border-radius:13px; overflow:hidden; background:#111116;
+    border:1px solid rgba(255,255,255,0.17);
+    box-shadow:0 26px 60px rgba(0,0,0,0.66), 0 0 0 1px rgba(99,102,241,0.14); }
+  .frame .bar { position:absolute; left:0; right:0; top:0; height:24px; background:rgba(22,22,29,0.98);
+    border-bottom:1px solid rgba(255,255,255,0.09); display:flex; align-items:center; gap:5px; padding-left:10px; }
+  .frame .bar i { width:7px; height:7px; border-radius:999px; background:rgba(255,255,255,0.22); }
+  .frame .img { position:absolute; inset:24px 0 0 0; overflow:hidden; }
+  .frame .img img { width:100%; display:block; object-fit:cover; object-position:top center; }
+
+  .main-shot { width:660px; height:410px; top:8px; left:0; transform:rotate(-2.2deg); }
+  .main-shot .img img { height:auto; }
+
+  /* ── 3-up strip ── */
+  .strip { display:flex; gap:16px; align-items:flex-end; height:100%; }
+  .strip .cell { flex:1; display:flex; flex-direction:column; gap:9px; }
+  .strip .mini { border-radius:11px; overflow:hidden; background:#111116;
+    border:1px solid rgba(255,255,255,0.16); box-shadow:0 16px 36px rgba(0,0,0,0.55); }
+  .strip .mini img { width:100%; display:block; }
+  .strip .lbl { font-size:13px; font-weight:700; letter-spacing:0.6px; color:rgba(250,250,250,0.6);
+    text-transform:uppercase; text-align:center; }
+
+  /* ── feature tiles ── */
+  .tiles { display:grid; grid-template-columns:1fr 1fr; gap:15px; height:100%; align-content:center; }
+  .tile { border:1px solid rgba(255,255,255,0.11); background:rgba(255,255,255,0.035);
+    border-radius:15px; padding:22px 20px; display:flex; flex-direction:column; gap:9px; }
+  .tile .ic { width:34px; height:34px; border-radius:10px; background:rgba(99,102,241,0.15);
+    border:1px solid rgba(99,102,241,0.34); display:flex; align-items:center; justify-content:center;
+    color:#A5B4FC; font-size:17px; font-weight:800; }
+  .tile .tt { font-size:17px; font-weight:700; color:#FAFAFA; letter-spacing:-0.2px; }
+  .tile .td { font-size:12.5px; color:rgba(250,250,250,0.46); line-height:1.5; }
+
+  /* ── architecture diagram (ai-2) ── */
+  .arch { position:relative; height:100%; display:flex; align-items:center; justify-content:center; gap:26px; }
+  .toolcol { display:flex; flex-direction:column; gap:13px; }
+  .tool { display:flex; align-items:center; gap:10px; border:1px solid rgba(255,255,255,0.13);
+    background:rgba(255,255,255,0.045); border-radius:11px; padding:12px 16px; min-width:158px;
+    font-size:14px; font-weight:600; color:rgba(250,250,250,0.78); }
+  .tool .d { width:8px; height:8px; border-radius:999px; background:#818CF8; flex-shrink:0; }
+  .arrow { font-size:26px; color:rgba(110,231,183,0.75); font-weight:700; }
+  .agent { border-radius:20px; padding:30px 26px; text-align:center;
+    border:1px solid rgba(52,211,153,0.5); background:rgba(52,211,153,0.1);
+    box-shadow:0 0 46px rgba(52,211,153,0.2); min-width:196px; }
+  .agent .big { font-size:22px; font-weight:800; color:#6EE7B7; letter-spacing:-0.4px; }
+  .agent .small { margin-top:7px; font-size:12px; font-weight:600; color:rgba(250,250,250,0.5);
+    letter-spacing:0.5px; text-transform:uppercase; }
+  .out { border:1px solid rgba(99,102,241,0.45); background:rgba(99,102,241,0.13); border-radius:14px;
+    padding:20px 22px; text-align:center; min-width:150px; }
+  .out .big { font-size:17px; font-weight:800; color:#A5B4FC; }
+  .out .small { margin-top:6px; font-size:11.5px; font-weight:600; color:rgba(250,250,250,0.48);
+    text-transform:uppercase; letter-spacing:0.5px; }
+
+  .tophead { position:absolute; top:52px; left:64px; right:64px; }
+  .center-body { position:relative; height:100%; display:flex; flex-direction:column;
+    justify-content:center; padding:0 64px; }
+  .brandmark { position:absolute; bottom:34px; left:64px; display:flex; align-items:center; gap:10px;
+    font-size:14px; font-weight:700; color:rgba(250,250,250,0.5); }
+  .brandmark .sq { width:26px; height:26px; border-radius:8px; background:#6366F1; color:#fff;
+    display:flex; align-items:center; justify-content:center; font-size:13px; font-weight:800; }
+  .badge-live { position:absolute; bottom:34px; right:64px; display:inline-flex; align-items:center; gap:8px;
+    font-size:12.5px; font-weight:700; text-transform:uppercase; letter-spacing:1.6px;
+    color:#6EE7B7; border:1px solid rgba(52,211,153,0.4); background:rgba(52,211,153,0.11);
+    padding:8px 15px; border-radius:999px; }
+  .badge-live .dot { width:7px; height:7px; border-radius:999px; background:#34D399; }
+
+  /* ── before / after data table ── */
+  .ba { display:grid; grid-template-columns:1fr 1fr; gap:22px; align-items:start; }
+  .ba-panel { border-radius:14px; overflow:hidden; border:1px solid rgba(255,255,255,0.13);
+    background:rgba(255,255,255,0.035); }
+  .ba-head { display:flex; align-items:center; gap:9px; padding:12px 16px;
+    border-bottom:1px solid rgba(255,255,255,0.1); font-size:12.5px; font-weight:700;
+    text-transform:uppercase; letter-spacing:1.5px; }
+  .ba-head.bad { color:#FCA5A5; background:rgba(248,113,113,0.09); }
+  .ba-head.good { color:#6EE7B7; background:rgba(52,211,153,0.09); }
+  .ba-head .d { width:7px; height:7px; border-radius:999px; }
+  .ba-head.bad .d { background:#F87171; }
+  .ba-head.good .d { background:#34D399; }
+  .ba-row { display:grid; grid-template-columns:1.1fr 1fr 1.2fr; gap:10px; padding:11px 16px;
+    font-size:13.5px; border-bottom:1px solid rgba(255,255,255,0.055);
+    font-family:'Consolas','Menlo',monospace; }
+  .ba-row:last-child { border-bottom:0; }
+  .ba-row.messy { color:rgba(252,165,165,0.9); }
+  .ba-row.clean { color:rgba(167,243,208,0.92); }
+  .ba-row .bad-cell { background:rgba(248,113,113,0.13); border-radius:4px; padding:0 5px; }
+  .ba-row .good-cell { background:rgba(52,211,153,0.13); border-radius:4px; padding:0 5px; }
+</style>
+</head>
+<body>
+
+<!-- ══════════════ FLASK 1 — hero ══════════════ -->
+<div class="stage" id="flask-1">
+  <div class="glow-a"></div><div class="dots"></div>
+  <div class="split">
+    <div class="col-text">
+      <div class="kicker">Python • Flask</div>
+      <h1>Flask + <span class="accent">PostgreSQL</span><br />Backend</h1>
+      <div class="sub">REST APIs • Auth • Deploy</div>
+      <div class="meta"><span>MaxCinema — built &amp; shipped</span><i></i><span>Live</span></div>
+    </div>
+    <div class="col-shot">
+      <div class="frame main-shot">
+        <div class="bar"><i></i><i></i><i></i></div>
+        <div class="img"><img src="public/screenshots/maxcinema-desktop.png" alt="" /></div>
+      </div>
+    </div>
+  </div>
+  <div class="brandmark"><span class="sq">I</span> Ifeanyi Agada</div>
+</div>
+
+<!-- ══════════════ FLASK 2 — 3-up strip ══════════════ -->
+<div class="stage" id="flask-2">
+  <div class="glow-a"></div><div class="dots"></div>
+  <div class="center-body">
+    <div class="tophead" style="position:static;margin-bottom:34px;">
+      <h1 style="font-size:40px;">Search • Categories • <span class="accent">Admin Panel</span></h1>
+    </div>
+    <div class="strip" style="height:330px;">
+      <div class="cell">
+        <div class="mini"><img src="public/screenshots/maxcinema-browsing.png" alt="" /></div>
+        <div class="lbl">Browsing</div>
+      </div>
+      <div class="cell">
+        <div class="mini"><img src="public/screenshots/maxcinema-categories.png" alt="" /></div>
+        <div class="lbl">Categories</div>
+      </div>
+      <div class="cell">
+        <div class="mini"><img src="public/screenshots/maxcinema-genres.png" alt="" /></div>
+        <div class="lbl">Filtering</div>
+      </div>
+    </div>
+  </div>
+  <div class="brandmark"><span class="sq">I</span> Ifeanyi Agada</div>
+</div>
+
+<!-- ══════════════ FLASK 3 — what you get ══════════════ -->
+<div class="stage" id="flask-3">
+  <div class="glow-a"></div><div class="dots"></div>
+  <div class="center-body">
+    <div class="tophead" style="position:static;margin-bottom:32px;">
+      <div class="kicker">What You Get</div>
+      <h1 style="font-size:42px;">A backend that <span class="accent">holds up</span></h1>
+    </div>
+    <div class="tiles" style="height:auto;">
+      <div class="tile"><div class="ic">01</div><div class="tt">REST API</div>
+        <div class="td">Clean endpoints, validation, and error handling that behaves under real traffic.</div></div>
+      <div class="tile"><div class="ic">02</div><div class="tt">PostgreSQL Schema</div>
+        <div class="td">Relational design with SQLAlchemy, built to grow instead of to be rewritten.</div></div>
+      <div class="tile"><div class="ic">03</div><div class="tt">JWT Auth</div>
+        <div class="td">Secure authentication and authorization scoped to what each user should reach.</div></div>
+      <div class="tile"><div class="ic">04</div><div class="tt">Deployed</div>
+        <div class="td">Shipped to Render or Supabase, documented, with source code you own.</div></div>
+    </div>
+  </div>
+  <div class="brandmark"><span class="sq">I</span> Ifeanyi Agada</div>
+</div>
+
+<!-- ══════════════ AI 1 — hero ══════════════ -->
+<div class="stage" id="ai-1">
+  <div class="glow-b"></div><div class="dots"></div>
+  <div class="split">
+    <div class="col-text">
+      <div class="kicker mint">MCP • Agents</div>
+      <h1>AI Automation &amp;<br /><span class="mint">Agent Integrations</span></h1>
+      <div class="sub">MCP Servers • Agents • Dashboards</div>
+      <div class="meta"><span>Atlas MCP — built &amp; shipped</span><i></i><span>Live</span></div>
+    </div>
+    <div class="col-shot">
+      <div class="frame main-shot">
+        <div class="bar"><i></i><i></i><i></i></div>
+        <div class="img"><img src="public/screenshots/atlas-dashboard.png" alt="" /></div>
+      </div>
+    </div>
+  </div>
+  <div class="brandmark"><span class="sq">I</span> Ifeanyi Agada</div>
+</div>
+
+<!-- ══════════════ AI 2 — architecture ══════════════ -->
+<div class="stage" id="ai-2">
+  <div class="glow-b"></div><div class="dots"></div>
+  <div class="center-body">
+    <div class="tophead" style="position:static;margin-bottom:44px;">
+      <h1 style="font-size:42px;">Your Tools → <span class="mint">AI Agent</span> → Results</h1>
+    </div>
+    <div class="arch" style="height:auto;">
+      <div class="toolcol">
+        <div class="tool"><span class="d"></span> Your Database</div>
+        <div class="tool"><span class="d"></span> Google Sheets</div>
+        <div class="tool"><span class="d"></span> Your CRM</div>
+        <div class="tool"><span class="d"></span> Email &amp; Slack</div>
+      </div>
+      <div class="arrow">→</div>
+      <div class="agent">
+        <div class="big">AI Agent</div>
+        <div class="small">MCP Server</div>
+      </div>
+      <div class="arrow">→</div>
+      <div class="out">
+        <div class="big">Dashboard</div>
+        <div class="small">See it work</div>
+      </div>
+    </div>
+  </div>
+  <div class="brandmark"><span class="sq">I</span> Ifeanyi Agada</div>
+</div>
+
+<!-- ══════════════ AI 3 — proof ══════════════ -->
+<div class="stage" id="ai-3">
+  <div class="glow-b"></div><div class="dots"></div>
+  <div class="center-body">
+    <div class="tophead" style="position:static;margin-bottom:26px;">
+      <h1 style="font-size:40px;">Built Atlas MCP — <span class="mint">Live Dashboard</span></h1>
+    </div>
+    <div class="frame" style="position:relative;width:1152px;height:452px;transform:none;">
+      <div class="bar"><i></i><i></i><i></i></div>
+      <div class="img"><img src="public/screenshots/atlas-dashboard.png" alt="" /></div>
+    </div>
+  </div>
+  <div class="brandmark"><span class="sq">I</span> Ifeanyi Agada</div>
+  <div class="badge-live"><span class="dot"></span> Shipped</div>
+</div>
+
+<!-- ══════════════ DATA 1 — hero ══════════════ -->
+<div class="stage" id="data-1">
+  <div class="glow-a"></div><div class="dots"></div>
+  <div class="split">
+    <div class="col-text">
+      <div class="kicker">Excel • CSV • Python</div>
+      <h1>Clean, Fixed &amp;<br /><span class="accent">Organized Data</span></h1>
+      <div class="sub">Duplicates out • Formats fixed • Ready to use</div>
+      <div class="meta"><span>Delivered as Excel or CSV</span><i></i><span>Fast turnaround</span></div>
+    </div>
+    <div class="col-shot">
+      <div class="ba" style="width:100%;">
+        <div class="ba-panel">
+          <div class="ba-head bad"><span class="d"></span> Before</div>
+          <div class="ba-row messy"><span>john smith</span><span>0803-123</span><span class="bad-cell">12/03/24</span></div>
+          <div class="ba-row messy"><span> JANE DOE </span><span>N/A</span><span class="bad-cell">blank</span></div>
+          <div class="ba-row messy"><span>john  smith</span><span>0803 123</span><span class="bad-cell">12/3/2024</span></div>
+          <div class="ba-row messy"><span>...</span><span>...</span><span class="bad-cell">...</span></div>
+        </div>
+        <div class="ba-panel">
+          <div class="ba-head good"><span class="d"></span> After</div>
+          <div class="ba-row clean"><span>John Smith</span><span>+234803123</span><span class="good-cell">2024-03-12</span></div>
+          <div class="ba-row clean"><span>Jane Doe</span><span>+234801111</span><span class="good-cell">2024-04-02</span></div>
+          <div class="ba-row clean"><span>John Smith</span><span>+234803123</span><span class="good-cell">2024-03-12</span></div>
+          <div class="ba-row clean"><span>...</span><span>...</span><span class="good-cell">...</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="brandmark"><span class="sq">I</span> Ifeanyi Agada</div>
+</div>
+
+<!-- ══════════════ DATA 2 — what gets fixed ══════════════ -->
+<div class="stage" id="data-2">
+  <div class="glow-a"></div><div class="dots"></div>
+  <div class="center-body">
+    <div class="tophead" style="position:static;margin-bottom:32px;">
+      <div class="kicker">What I Fix</div>
+      <h1 style="font-size:42px;">Messy spreadsheet → <span class="accent">usable data</span></h1>
+    </div>
+    <div class="tiles" style="height:auto;">
+      <div class="tile"><div class="ic">01</div><div class="tt">Duplicates</div>
+        <div class="td">Repeated rows and near-matches merged, with the real record kept.</div></div>
+      <div class="tile"><div class="ic">02</div><div class="tt">Broken Formats</div>
+        <div class="td">Dates, phone numbers, names and currency normalised into one consistent style.</div></div>
+      <div class="tile"><div class="ic">03</div><div class="tt">Split &amp; Merged</div>
+        <div class="td">Columns split apart or joined together, ready for filtering and pivot tables.</div></div>
+      <div class="tile"><div class="ic">04</div><div class="tt">Missing Values</div>
+        <div class="td">Blanks and junk entries found, flagged, and handled — not silently dropped.</div></div>
+    </div>
+  </div>
+  <div class="brandmark"><span class="sq">I</span> Ifeanyi Agada</div>
+</div>
+
+<!-- ══════════════ DATA 3 — proof / scope ══════════════ -->
+<div class="stage" id="data-3">
+  <div class="glow-a"></div><div class="dots"></div>
+  <div class="center-body">
+    <div class="tophead" style="position:static;margin-bottom:30px;">
+      <h1 style="font-size:40px;">Any size file. <span class="accent">Any mess.</span></h1>
+    </div>
+    <div class="ba" style="width:100%;">
+      <div class="ba-panel">
+        <div class="ba-head bad"><span class="d"></span> Typical Input</div>
+        <div class="ba-row messy"><span>Inconsistent names</span><span>Mixed case</span><span class="bad-cell">Extra spaces</span></div>
+        <div class="ba-row messy"><span>3 date styles</span><span>Text numbers</span><span class="bad-cell">Merged cells</span></div>
+        <div class="ba-row messy"><span>Duplicate rows</span><span>Empty cells</span><span class="bad-cell">Junk rows</span></div>
+      </div>
+      <div class="ba-panel">
+        <div class="ba-head good"><span class="d"></span> What You Get Back</div>
+        <div class="ba-row clean"><span>One clean table</span><span>Consistent columns</span><span class="good-cell">Ready to sort</span></div>
+        <div class="ba-row clean"><span>Real dates</span><span>Real numbers</span><span class="good-cell">No duplicates</span></div>
+        <div class="ba-row clean"><span>Excel or CSV</span><span>Your original kept</span><span class="good-cell">Notes on changes</span></div>
+      </div>
+    </div>
+  </div>
+  <div class="brandmark"><span class="sq">I</span> Ifeanyi Agada</div>
+  <div class="badge-live"><span class="dot"></span> Delivered in 24-48h</div>
+</div>
+
+<script>
+  var id = (location.hash || '#flask-1').slice(1);
+  var el = document.getElementById(id);
+  if (el) el.classList.add('on');
+  else document.getElementById('flask-1').classList.add('on');
+</script>
+</body>
+</html>

@@ -7,12 +7,14 @@ const socialIcon: Record<string, React.ReactNode> = {
   WhatsApp: <MessageCircle size={15} />,
 };
 
+// Matches the header so the two navigations never disagree.
 const navLinks = [
-  { label: 'Work',     href: '#work' },
-  { label: 'Services', href: '#services' },
-  { label: 'Process',  href: '#process' },
-  { label: 'About',    href: '#about' },
-  { label: 'Contact',  href: '#contact' },
+  { label: 'Work',        href: '#work' },
+  { label: 'Skills',      href: '#skills' },
+  { label: 'Experience',  href: '#experience' },
+  { label: 'About',       href: '#about' },
+  { label: 'Recognition', href: '#recognition' },
+  { label: 'Contact',     href: '#contact' },
 ];
 
 export default function Footer() {
@@ -38,7 +40,8 @@ export default function Footer() {
               <span>Ifeanyi<span className="text-gradient">.</span></span>
             </a>
             <p className="mt-3 max-w-xs text-sm leading-[1.7] text-ink/35">
-              Full-Stack & AI Developer — building the web, one project at a time.
+              {site.shortRole} — Computer Science student building real software and AI systems,
+              and open to IT and internship opportunities.
             </p>
           </div>
 

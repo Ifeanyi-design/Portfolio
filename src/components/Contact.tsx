@@ -1,5 +1,5 @@
 import { useState, type FormEvent } from 'react';
-import { Mail, MapPin, GitFork, Link2, MessageCircle, Send, ArrowUpRight, Copy, Check, Clock } from 'lucide-react';
+import { Mail, MapPin, GitFork, Link2, MessageCircle, Send, ArrowUpRight, Copy, Check, BadgeCheck } from 'lucide-react';
 import { site } from '../data/site';
 
 const inputCls =
@@ -19,7 +19,7 @@ export default function Contact() {
 
   function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    const sub  = encodeURIComponent(`Project enquiry from ${name || 'Portfolio Visitor'}`);
+    const sub  = encodeURIComponent(`Enquiry from ${name || 'Portfolio Visitor'}`);
     const body = encodeURIComponent(`Hi Ifeanyi,\n\n${message}\n\n— ${name}\nReply to: ${email}`);
     window.location.href = `mailto:${site.email}?subject=${sub}&body=${body}`;
   }
@@ -52,14 +52,17 @@ export default function Contact() {
           <div className="relative flex flex-col gap-8 sm:flex-row sm:items-center sm:justify-between">
             <div>
               <div className="inline-flex items-center gap-2 rounded-full border border-ok/25 bg-ok/10 px-3 py-1 text-xs font-semibold text-ok mb-4">
-                <Clock size={12} />
-                <span>I reply to every message — usually the same day</span>
+                <BadgeCheck size={12} />
+                <span>Open to Opportunities</span>
               </div>
               <h2 className="text-4xl font-black leading-tight sm:text-5xl">
-                Have a project <span className="text-gradient">in mind?</span>
+                Let's talk about an{' '}
+                <span className="text-gradient">internship, role or project</span>
               </h2>
               <p className="mt-4 max-w-md text-sm leading-[1.8] text-ink/60">
-                Whether you're looking for full-stack web applications, AI automation, or dedicated engineering support, let's build something exceptional.
+                I'm open to IT / SIWES placements, software engineering internships and AI-focused
+                roles. I also take on freelance product work when the fit is right. I reply to
+                every message — usually the same day.
               </p>
             </div>
             <div className="flex shrink-0 flex-wrap gap-3">
@@ -184,14 +187,14 @@ export default function Contact() {
             </div>
 
             <label className="flex flex-col gap-1.5 text-xs font-semibold text-ink/50">
-              Project Description / Message
+              Message
               <textarea
                 required
                 rows={5}
                 value={message}
                 onChange={(e) => setMessage(e.target.value)}
                 className={`${inputCls} resize-y`}
-                placeholder="What are you building? What is your timeline and budget?"
+                placeholder="What are you building? Or tell me about the role, the team and the timeline."
               />
             </label>
 

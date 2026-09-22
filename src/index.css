@@ -122,6 +122,21 @@
     transform: translateY(-3px);
   }
 
+  /* ── Chip / pill primitives ──
+     Extracted so the career sections (skills, experience, recognition,
+     project tags) share one definition instead of repeating the same
+     border + background + radius markup in every file. */
+  .chip {
+    @apply inline-flex items-center rounded-full border px-2.5 py-1 text-[11px] font-medium text-ink/55;
+    border-color: rgba(255,255,255,0.08);
+    background: rgba(24,24,31,0.9);
+  }
+  .chip-accent {
+    @apply inline-flex items-center gap-1 rounded-full border px-2.5 py-1 text-[10px] font-bold uppercase tracking-wide text-accent-light;
+    border-color: rgba(99,102,241,0.3);
+    background: rgba(99,102,241,0.12);
+  }
+
   /* ── Scroll progress bar ── */
   .scroll-progress {
     position: fixed;

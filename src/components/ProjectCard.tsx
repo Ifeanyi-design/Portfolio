@@ -1,4 +1,7 @@
-import { ExternalLink, GitFork, Film, Palette, BrainCircuit, Zap, Printer, Clapperboard, Maximize2 } from 'lucide-react';
+import {
+  ExternalLink, GitFork, Film, Palette, BrainCircuit, Zap, Printer, Clapperboard,
+  Maximize2, CarFront, GraduationCap, Trophy,
+} from 'lucide-react';
 import type { Project } from '../types';
 import type { ModalImageData } from './ImageModal';
 
@@ -10,12 +13,14 @@ interface Props {
 /* Single consistent icon per project — no emoji */
 function ProjectIcon({ id }: { id: string }) {
   const map: Record<string, React.ReactNode> = {
+    'intellict':     <CarFront size={20} />,
     'maxcinema':     <Film size={20} />,
     'manga-forge':   <Palette size={20} />,
     'atlas':         <BrainCircuit size={20} />,
     'servicesync':   <Zap size={20} />,
     'gregbuk':       <Printer size={20} />,
     'zara-video':    <Clapperboard size={20} />,
+    'padeespace':    <GraduationCap size={20} />,
   };
   return <>{map[id] ?? <Zap size={20} />}</>;
 }
@@ -59,6 +64,26 @@ export default function ProjectCard({ project, onExpandImage }: Props) {
               </span>
             )}
           </div>
+
+          {/* Role — makes collaborative work explicit instead of looking solo */}
+          <p className="mt-1.5 text-[11px] font-semibold text-ink/40">
+            Role · <span className="text-accent-light">{project.role}</span>
+          </p>
+
+          {/* What this card demonstrates, for a technical reader */}
+          <div className="mt-2.5 flex flex-wrap gap-1.5">
+            {project.tags.map((tag) => (
+              <span key={tag} className="chip">{tag}</span>
+            ))}
+          </div>
+
+          {/* Verified recognition, when there is one */}
+          {project.recognition && (
+            <span className="mt-3 inline-flex items-start gap-1.5 rounded-lg border border-accent/25 bg-accent-muted px-2.5 py-1.5 text-[11px] font-semibold leading-snug text-accent-light">
+              <Trophy size={12} className="mt-[1px] shrink-0" aria-hidden />
+              {project.recognition}
+            </span>
+          )}
         </div>
       </div>
 
@@ -150,7 +175,7 @@ export default function ProjectCard({ project, onExpandImage }: Props) {
         )}
         {!hasDemo && !hasGithub && (
           <p className="flex-1 text-center text-xs font-medium text-ink/40 py-2.5">
-            Preview available on request — message me
+            Built with a team — details on request
           </p>
         )}
       </div>
